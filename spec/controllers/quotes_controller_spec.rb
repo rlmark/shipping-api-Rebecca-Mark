@@ -9,7 +9,10 @@ RSpec.describe QuotesController, :type => :controller do
     end
 
     context "Querying USPS API" do
-      
+      # it "returns an error if missing package weight" do
+      #   get :calculate, {provider: 'usps', package_weight: '', origin_zip: 98275, destination_zip: 98105}
+      #   expet(response.code).to equal 400
+      # end
     end
   end
 
