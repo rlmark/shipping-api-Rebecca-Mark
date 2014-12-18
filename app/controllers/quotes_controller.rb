@@ -23,10 +23,10 @@ before_action :make_package, :make_origin, :make_destination
     end
   end
 
-  # http://localhost:3000/quotes/calculate?provider=ups&origin_country=US&origin_state=CA&origin_city=Beverly+Hills&origin_zip=90210&destination_country=US&destination_state=WA&destination_city=Seattle&destination_zip=98105&package_weight=14
+  # http://localhost:3000/quotes/calculate?provider=ups&destination_country=US&destination_state=WA&destination_city=Seattle&destination_zip=98105&package_weight=14
   def make_ups_quote
     ups = UPS.new(:login => ENV['UPS_LOGIN'], :password => ENV['UPS_KEY'], :key => ENV['UPS_KEY'])
-    response = ups.find_rates(@origin, make_destination, @package)
+    response = ups.find_rates(@origin, @destination, @package)
     response_rates = response.rates.sort_by(&:price).collect {|rate| [rate.service_name, rate.price]}
     render json: response_rates
   end
@@ -48,15 +48,11 @@ before_action :make_package, :make_origin, :make_destination
 
 # http://localhost:3000/quotes/calculate?provider=usps&origin_country=US&origin_state=CA&origin_city=Beverly+Hills&origin_zip=90210
   def make_origin
-    if params[:origin_zip].blank?
-      render json: {error: "Must provide an origin address"}, status: :bad_request
-    else
-      @origin = Location.new(
-      :country => params[:origin_country],
-      :state => params[:origin_state],
-      :city => params[:origin_city],
-      :zip => params[:origin_zip])
-    end
+    @origin = Location.new(
+    :country => "US",
+    :state => "WA",
+    :city => "Seattle",
+    :zip => "98105")
   end
   # Note to self, spaces after ? are represented by + signs
 
