@@ -73,7 +73,7 @@ before_action :make_package, :make_origin, :make_destination
     end
   end
 
-  # http://localhost:3000/quotes/calculate?provider=usps&origin_country=US&origin_state=CA&origin_city=Beverly+Hills&origin_zip=90210&destination_country=US&destination_state=WA&destination_city=Seattle&destination_zip=98105&package_lbs=16
+  # http://localhost:3000/quotes/calculate?provider=usps&origin_country=US&origin_state=CA&origin_city=Beverly+Hills&origin_zip=90210&destination_country=US&destination_state=WA&destination_city=Seattle&destination_zip=98105&package_weight=16
   def make_package
     if params[:package_weight].blank?
       render json: {error: "Must provide a package weight"}, status: :bad_request
