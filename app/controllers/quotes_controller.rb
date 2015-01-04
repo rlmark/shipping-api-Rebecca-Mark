@@ -12,6 +12,7 @@ class QuotesController < ApplicationController
 before_action :make_package, :make_origin, :make_destination
 
   def calculate
+    raise request.inspect
     if params[:provider] == "fedex"
       make_fedex_quote
     elsif params[:provider] == "usps"
