@@ -12,7 +12,6 @@ class QuotesController < ApplicationController
 before_action :make_package, :make_origin, :make_destination
 
   def calculate
-    raise request.inspect
     if params[:provider] == "fedex"
       make_fedex_quote
     elsif params[:provider] == "usps"
@@ -22,6 +21,13 @@ before_action :make_package, :make_origin, :make_destination
     else
       render json: {error: "Must provide a postal carrier"}, status: :bad_request
     end
+    request_parser
+    log = Log.create(ip: @ip, request_url: @query, response_code: response.code, response_text: response.body, params: params.to_s )
+  end
+
+  def request_parser
+    @query = request.env["REQUEST_URI"]
+    @ip = request.env["REMOTE_ADDR"]
   end
 
   # http://localhost:3000/quotes/calculate?provider=ups&destination_country=US&destination_state=WA&destination_city=Seattle&destination_zip=98105&package_weight=14
